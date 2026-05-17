@@ -1,26 +1,385 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --graphite: #2b2925;
+  --graphite-deep: #1f1e1b;
+  --card: #332f2a;
+  --gold: #d6a84f;
+  --gold-light: #f1d184;
+  --cream: #f5efe2;
+  --muted: #c8bfae;
+  --line: rgba(214, 168, 79, 0.35);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-graphite: var(--graphite);
+  --color-graphite-deep: var(--graphite-deep);
+  --color-card: var(--card);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-cream: var(--cream);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(214, 168, 79, 0.1), transparent 26rem),
+    linear-gradient(180deg, #2b2925 0%, #1f1e1b 100%);
+  color: var(--cream);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: rgba(214, 168, 79, 0.35);
+  color: var(--cream);
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(31, 30, 27, 0.78);
+  color: var(--cream);
+  outline: none;
+}
+
+input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  appearance: none;
+  display: grid;
+  place-content: center;
+  border-color: rgba(214, 168, 79, 0.55);
+  background: rgba(31, 30, 27, 0.85);
+  cursor: pointer;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  clip-path: polygon(14% 44%, 0 59%, 38% 96%, 100% 18%, 84% 4%, 36% 66%);
+  transform: scale(0);
+  transform-origin: center;
+  background: var(--graphite-deep);
+  transition: transform 140ms ease;
+}
+
+input[type="checkbox"]:checked {
+  border-color: var(--gold-light);
+  background: var(--gold);
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--gold-light);
+  box-shadow: 0 0 0 3px rgba(214, 168, 79, 0.14);
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.section-shell {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+@media (max-width: 399px) {
+  .section-shell {
+    width: min(1180px, calc(100% - 32px));
+  }
+}
+
+.serif-title {
+  font-family: var(--font-serif);
+  letter-spacing: 0;
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #f1d184 0%, #d6a84f 48%, #9d7130 100%);
+}
+
+.hero-featured-properties {
+  position: relative;
+  overflow: hidden;
+  animation: hero-featured-properties-in 760ms ease-out 260ms both;
+}
+
+.hero-featured-properties::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(241, 209, 132, 0.72),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: hero-featured-border-pass 7s ease-in-out 1.1s infinite;
+  pointer-events: none;
+}
+
+.hero-property-card {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: hero-property-card-in 680ms ease-out both;
+  transition:
+    border-color 260ms ease,
+    box-shadow 260ms ease,
+    transform 260ms ease,
+    background-color 260ms ease;
+}
+
+.hero-cta-group {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: hero-cta-in 640ms ease-out 420ms both;
+}
+
+.hero-cta-primary,
+.hero-cta-secondary {
+  transition:
+    border-color 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease,
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-property-card:hover {
+    border-color: rgba(241, 209, 132, 0.72);
+    background-color: rgba(31, 30, 27, 0.58);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(214, 168, 79, 0.08);
+    transform: translateY(-5px);
+  }
+
+  .hero-cta-primary:hover,
+  .hero-cta-secondary:hover {
+    transform: translateY(-2px);
+  }
+
+  .hero-cta-primary:hover {
+    box-shadow: 0 16px 36px rgba(214, 168, 79, 0.18);
+  }
+}
+
+.services-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 20% 36%,
+    rgba(214, 168, 79, 0.07),
+    transparent 30rem
+  );
+  pointer-events: none;
+}
+
+.services-section::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(241, 209, 132, 0.22),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.process-benefits-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(241, 209, 132, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(241, 209, 132, 0.04) 1px, transparent 1px);
+  background-size: 84px 84px;
+  mask-image: radial-gradient(circle at 76% 42%, black 0, transparent 58%);
+  pointer-events: none;
+}
+
+.process-benefits-section::after {
+  content: "";
+  position: absolute;
+  right: max(24px, calc((100vw - 1180px) / 2));
+  top: 88px;
+  width: min(520px, 52vw);
+  height: min(520px, 52vw);
+  border: 1px solid rgba(241, 209, 132, 0.055);
+  background:
+    linear-gradient(90deg, transparent 49%, rgba(241, 209, 132, 0.05) 50%, transparent 51%),
+    linear-gradient(transparent 49%, rgba(241, 209, 132, 0.05) 50%, transparent 51%),
+    linear-gradient(135deg, transparent 0 47%, rgba(241, 209, 132, 0.045) 48% 52%, transparent 53%);
+  pointer-events: none;
+  transform: rotate(-6deg);
+}
+
+.process-reveal,
+.process-step-card,
+.benefit-card {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: process-section-in 680ms ease-out both;
+}
+
+.process-step-card,
+.benefit-card {
+  position: relative;
+  transition:
+    border-color 240ms ease,
+    background-color 240ms ease,
+    transform 240ms ease;
+}
+
+.benefit-card {
+  min-height: 240px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .process-step-card:hover,
+  .benefit-card:hover {
+    border-color: rgba(241, 209, 132, 0.62);
+    background-color: rgba(31, 30, 27, 0.72);
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes hero-featured-properties-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-property-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-cta-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-featured-border-pass {
+  0%,
+  48% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  58% {
+    opacity: 1;
+  }
+  72%,
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes process-section-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .process-benefits-section::before {
+    opacity: 0.45;
+    mask-image: linear-gradient(to bottom, black, transparent 70%);
+  }
+
+  .process-benefits-section::after {
+    display: none;
+  }
+
+  .benefit-card {
+    min-height: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-featured-properties,
+  .hero-featured-properties::before,
+  .hero-cta-group,
+  .hero-property-card,
+  .process-reveal,
+  .process-step-card,
+  .benefit-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero-property-card,
+  .hero-property-card:hover,
+  .hero-property-card img,
+  .hero-cta-primary,
+  .hero-cta-primary:hover,
+  .hero-cta-secondary,
+  .hero-cta-secondary:hover,
+  .process-step-card,
+  .process-step-card:hover,
+  .benefit-card,
+  .benefit-card:hover {
+    transition: none;
+    transform: none;
+  }
 }

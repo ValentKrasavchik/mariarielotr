@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Мария Риелтор
 
-## Getting Started
+Персональный сайт риелтора для домена `mariarieltor.ru`: публичный каталог объектов, детальные страницы недвижимости, форма заявок и защищенная админ-панель.
 
-First, run the development server:
+## Стек
+
+- Next.js App Router, TypeScript, Tailwind CSS
+- Prisma ORM
+- SQLite для локальной разработки
+- NextAuth/Auth.js credentials-login для `/admin`
+- Server Actions для заявок, CRUD и загрузки фото
+
+## Быстрый старт
+
+1. Установите зависимости:
+
+```bash
+npm install
+```
+
+2. Создайте `.env`:
+
+```env
+DATABASE_URL="file:./dev.db"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="replace-with-long-random-secret"
+NEXT_PUBLIC_SITE_URL="https://mariarieltor.ru"
+ADMIN_EMAIL="admin@mariarieltor.ru"
+ADMIN_PASSWORD="admin12345"
+```
+
+3. Подготовьте базу:
+
+```bash
+npm run prisma:generate
+npm run db:migrate
+npm run db:seed
+```
+
+Если проект лежит в Windows-папке с кириллицей и `prisma migrate dev` падает из-за schema engine, используйте локальный обход:
+
+```bash
+npm run db:apply
+npm run db:seed
+```
+
+4. Запустите сайт:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Сайт откроется на `http://localhost:3000`. Админка: `http://localhost:3000/admin`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Администратор
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Администратор создается seed-скриптом из переменных:
 
-## Learn More
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
 
-To learn more about Next.js, take a look at the following resources:
+После первого запуска смените пароль в `.env` и повторно выполните `npm run db:seed`, либо обновите запись напрямую через Prisma Studio:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run db:studio
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Основные разделы
 
-## Deploy on Vercel
+- `/` - главная страница
+- `/objects` - каталог с фильтрами
+- `/objects/[slug]` - детальная страница объекта
+- `/admin` - защищенная панель
+- `/admin/objects` - CRUD объектов и загрузка фото
+- `/admin/reviews` - CRUD отзывов
+- `/admin/leads` - заявки и статусы
+- `/admin/settings` - контакты, тексты hero/about и SEO
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Изображения
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Фото объектов можно добавлять в админке:
+
+- загрузкой файлов с компьютера
+- вставкой URL изображений
+
+Локальные файлы сохраняются в `public/uploads/properties`. Для production на serverless-хостинге лучше заменить локальную загрузку на S3, Cloudflare R2 или другое постоянное хранилище.
+
+## SEO
+
+Уже добавлено:
+
+- `title` и `description` для главной
+- SEO-поля для объектов
+- Open Graph
+- `sitemap.xml`
+- `robots.txt`
+- базовая JSON-LD микроразметка `RealEstateAgent`
+
+## Сборка
+
+```bash
+npm run lint
+npm run build
+npm run start
+```
+
+Скрипты `dev` и `build` запускают Next.js через webpack, потому что Turbopack в текущей версии может падать на Windows-путях с кириллицей.
+
+## Деплой
+
+Для VPS:
+
+1. Установите Node.js 22+.
+2. Скопируйте проект и настройте `.env`.
+3. Выполните `npm ci`.
+4. Выполните `npm run prisma:generate`, `npm run db:migrate`, `npm run db:seed`.
+5. Выполните `npm run build`.
+6. Запустите `npm run start` под процесс-менеджером.
+
+Для PostgreSQL:
+
+1. В `prisma/schema.prisma` замените `provider = "sqlite"` на `provider = "postgresql"`.
+2. Укажите PostgreSQL `DATABASE_URL`.
+3. Выполните `npm run db:migrate` и `npm run db:seed`.

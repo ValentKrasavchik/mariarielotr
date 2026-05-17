@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Property {
+  id             String          @id @default(cuid())
+  title          String
+  slug           String          @unique
+  dealType       String
+  objectType     String
+  status         String          @default("actual")
+  price          Int
+  currency       String          @default("RUB")
+  city           String
+  district       String
+  address        String?
+  area           Float
+  rooms          Int?
+  floor          Int?
+  floors         Int?
+  bathroom       String?
+  renovation     String?
+  builtYear      Int?
+  description    String
+  benefits       String?
+  seoTitle       String?
+  seoDescription String?
+  isPublished    Boolean         @default(true)
+  showInHero     Boolean         @default(false)
+  heroOrder      Int             @default(0)
+  sortOrder      Int             @default(0)
+  images         PropertyImage[]
+  videos         PropertyVideo[]
+  leads          Lead[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([isPublished, status, sortOrder])
+  @@index([showInHero, isPublished, status, heroOrder])
+  @@index([dealType, objectType, city, district])
+}
+
+model PropertyImage {
+  id         String   @id @default(cuid())
+  url        String
+  alt        String?
+  sortOrder  Int      @default(0)
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String
+  createdAt  DateTime @default(now())
+
+  @@index([propertyId, sortOrder])
+}
+
+model PropertyVideo {
+  id         String   @id @default(cuid())
+  url        String
+  title      String?
+  sortOrder  Int      @default(0)
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String
+  createdAt  DateTime @default(now())
+
+  @@index([propertyId, sortOrder])
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  clientName  String
+  text        String
+  rating      Int      @default(5)
+  photo       String?
+  date        DateTime @default(now())
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isPublished, date])
+}
+
+model Lead {
+  id          String    @id @default(cuid())
+  name        String
+  phone       String
+  requestType String
+  comment     String?
+  status      String    @default("new")
+  property    Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  propertyId  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model SiteSettings {
+  id             Int      @id @default(autoincrement())
+  phone          String   @default("+7 949 305-39-00")
+  whatsapp       String   @default("79493053900")
+  telegram       String   @default("maria_rieltor")
+  email          String   @default("hello@mariarieltor.ru")
+  heroTitle      String   @default("Мария Риелтор")
+  heroSubtitle   String   @default("Недвижимость с заботой о результате")
+  heroText       String   @default("Помогаю безопасно купить, продать или подобрать недвижимость в Донецке и Донецкой области - от первой консультации до завершения сделки.")
+  aboutText      String   @default("Мария помогает клиентам безопасно покупать, продавать и подбирать недвижимость. В работе важны прозрачность, внимательность к деталям и спокойное сопровождение клиента на каждом этапе сделки.")
+  seoTitle       String   @default("Мария Риелтор - недвижимость в Донецке и Донецкой области")
+  seoDescription String   @default("Персональный сайт риелтора Марии: актуальные объекты, сопровождение покупки и продажи недвижимости, консультации по рынку.")
+  workTime       String   @default("Ежедневно с 10:00 до 20:00")
+  region         String   @default("Донецк и Донецкая область")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
