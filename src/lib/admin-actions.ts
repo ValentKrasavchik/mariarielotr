@@ -127,9 +127,6 @@ function propertyData(formData: FormData) {
 
 async function saveUploadedImages(formData: FormData) {
   const files = formData.getAll("photos");
-  const uploadDir = path.join(process.cwd(), "public", "uploads", "properties");
-  await mkdir(uploadDir, { recursive: true });
-
   const urls: string[] = [];
 
   for (const entry of files) {
@@ -137,12 +134,8 @@ async function saveUploadedImages(formData: FormData) {
       continue;
     }
 
-    const extension = path.extname(entry.name) || ".jpg";
-    const filename = `${Date.now()}-${randomUUID()}${extension}`;
-    const buffer = Buffer.from(await entry.arrayBuffer());
-
-    await writeFile(path.join(uploadDir, filename), buffer);
-    urls.push(`/uploads/properties/${filename}`);
+    const { savePropertyImage } = await import("@/lib/upload-media");
+    urls.push(await savePropertyImage(entry));
   }
 
   return urls;
@@ -150,15 +143,6 @@ async function saveUploadedImages(formData: FormData) {
 
 async function saveUploadedVideos(formData: FormData) {
   const files = formData.getAll("videos");
-  const uploadDir = path.join(
-    process.cwd(),
-    "public",
-    "uploads",
-    "properties",
-    "videos",
-  );
-  await mkdir(uploadDir, { recursive: true });
-
   const urls: string[] = [];
 
   for (const entry of files) {
@@ -166,12 +150,8 @@ async function saveUploadedVideos(formData: FormData) {
       continue;
     }
 
-    const extension = path.extname(entry.name) || ".mp4";
-    const filename = `${Date.now()}-${randomUUID()}${extension}`;
-    const buffer = Buffer.from(await entry.arrayBuffer());
-
-    await writeFile(path.join(uploadDir, filename), buffer);
-    urls.push(`/uploads/properties/videos/${filename}`);
+    const { savePropertyVideo } = await import("@/lib/upload-media");
+    urls.push(await savePropertyVideo(entry));
   }
 
   return urls;
@@ -191,9 +171,21 @@ function videoUrlsFromTextarea(formData: FormData) {
     .filter(Boolean);
 }
 
-export async function createProperty(formData: FormData) {
-  await ensureAdmin();
+export type PropertyFormState = {
+  ok: boolean;
+  message: string;
+};
 
+function isNextRedirect(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "digest" in error &&
+    String((error as { digest?: string }).digest).includes("NEXT_REDIRECT")
+  );
+}
+
+async function createPropertyRecord(formData: FormData) {
   const data = propertyData(formData);
   const images = [
     ...imageUrlsFromTextarea(formData),
@@ -204,7 +196,7 @@ export async function createProperty(formData: FormData) {
     ...(await saveUploadedVideos(formData)),
   ];
 
-  const property = await prisma.property.create({
+  return prisma.property.create({
     data: {
       ...data,
       images: {
@@ -223,10 +215,54 @@ export async function createProperty(formData: FormData) {
       },
     },
   });
+}
+
+export async function createProperty(formData: FormData) {
+  await ensureAdmin();
+
+  const property = await createPropertyRecord(formData);
 
   revalidatePath("/");
   revalidatePath("/objects");
   redirect(`/admin/objects/${property.id}`);
+}
+
+export async function createPropertyFormAction(
+  _prev: PropertyFormState,
+  formData: FormData,
+): Promise<PropertyFormState> {
+  try {
+    await ensureAdmin();
+
+    const property = await createPropertyRecord(formData);
+
+    revalidatePath("/");
+    revalidatePath("/objects");
+    redirect(`/admin/objects/${property.id}`);
+  } catch (error) {
+    if (isNextRedirect(error)) {
+      throw error;
+    }
+
+    console.error("createPropertyFormAction", error);
+
+    const message =
+      error instanceof Error ? error.message.toLowerCase() : "";
+
+    if (message.includes("unique constraint") || message.includes("slug")) {
+      return {
+        ok: false,
+        message:
+          "Похожий объект уже есть. Немного измените заголовок и попробуйте снова.",
+      };
+    }
+
+    return {
+      ok: false,
+      message:
+        "Не удалось сохранить объект. Проверьте поля, размер фото и попробуйте ещё раз.",
+    };
+  }
 }
 
 export async function updateProperty(id: string, formData: FormData) {

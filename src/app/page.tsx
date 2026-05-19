@@ -181,7 +181,7 @@ export default async function HomePage() {
       <SiteHeader phone={settings.phone} />
       <main>
         <section
-          className="relative min-h-[calc(100vh-80px)] overflow-hidden border-b border-line bg-cover bg-center"
+          className="relative min-h-[calc(100vh-80px)] overflow-hidden bg-cover bg-center"
           style={{ backgroundImage: "url('/hero-bg.png')" }}
         >
           <div
@@ -368,11 +368,11 @@ export default async function HomePage() {
           <div className="section-shell grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="relative min-h-[420px] overflow-hidden border border-line bg-card">
               <Image
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=85"
+                src="/maria-about.png"
                 alt="Мария, персональный риелтор"
                 fill
                 sizes="(min-width: 1024px) 40vw, 100vw"
-                className="object-cover"
+                className="object-cover object-[center_18%]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-graphite-deep/80 via-graphite-deep/20 to-transparent" />
               <div className="absolute inset-6 border border-line" />
@@ -417,7 +417,7 @@ export default async function HomePage() {
 
         <section
           id="services"
-          className="services-section relative isolate overflow-hidden border-t border-line/15 bg-graphite-deep py-20 md:py-24"
+          className="services-section relative isolate overflow-hidden bg-graphite-deep py-20 md:py-24"
         >
           <div className="section-shell relative z-10">
             <div className="max-w-2xl">
@@ -554,7 +554,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section id="reviews" className="py-24">
+        <section id="reviews" className="bg-graphite-deep py-24">
           <div className="section-shell">
             <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(360px,420px)] xl:items-start">
               <div className="max-w-2xl xl:col-start-1 xl:row-start-1">

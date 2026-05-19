@@ -165,6 +165,7 @@ export default async function ObjectPage({ params }: ObjectPageProps) {
                         src={image.url}
                         alt={image.alt ?? property.title}
                         fill
+                        loading="lazy"
                         sizes="(min-width: 1024px) 18vw, 33vw"
                         className="object-cover"
                       />

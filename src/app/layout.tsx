@@ -32,8 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className="h-full scroll-smooth">
-      <body className="min-h-full bg-graphite text-cream antialiased">
-        {children}
+      <body className="site-body min-h-full bg-graphite text-cream antialiased">
+        <div aria-hidden className="site-bg" />
+        <div className="relative z-10 min-h-full">{children}</div>
       </body>
     </html>
   );
