@@ -118,7 +118,7 @@ const facts = [
   {
     number: "02",
     icon: ShieldCheck,
-    title: "Проверка документов без сложных слов",
+    title: "Проверка документов",
     text: "Заранее объясняю риски понятным языком, чтобы вы принимали решения спокойно.",
   },
   {
@@ -212,7 +212,7 @@ export default async function HomePage() {
                 {settings.heroText}
               </p>
 
-              <div className="hero-cta-group mt-7 flex w-full max-w-[16.5rem] flex-col gap-3 min-[480px]:max-w-[35rem] min-[640px]:flex-row min-[640px]:items-center">
+              <div className="hero-cta-group mt-7 flex w-full max-w-[35rem] flex-col gap-3 min-[480px]:max-w-[38rem] md:max-w-3xl min-[640px]:flex-row min-[640px]:items-center">
                 <Link
                   href="#contacts"
                   className="hero-cta-primary inline-flex w-full items-center justify-center gap-2 border border-gold-light/70 bg-gold px-5 py-3.5 text-sm font-semibold text-graphite-deep shadow-lg shadow-black/15 hover:border-gold-light hover:bg-gold-light"
@@ -221,28 +221,28 @@ export default async function HomePage() {
                   <ArrowRight size={17} />
                 </Link>
               </div>
-              <div className="mt-4 w-full max-w-[16.5rem] min-[480px]:max-w-[35rem]">
+              <div className="mt-4 w-full max-w-[35rem] min-[480px]:max-w-[38rem] md:max-w-3xl">
                 <p className="text-xs uppercase tracking-[0.18em] text-cream/70">
                   Или напишите напрямую
                 </p>
-                <div className="mt-3 grid gap-3 min-[480px]:grid-cols-3">
+                <div className="mt-3 grid w-full grid-cols-1 gap-3 min-[480px]:grid-cols-3">
                   <a
                     href={whatsappLink(settings.whatsapp)}
-                    className="inline-flex items-center justify-center gap-2 border border-line bg-graphite-deep/20 px-4 py-3 text-sm font-semibold text-cream hover:border-gold-light hover:bg-gold/10 hover:text-gold-light"
+                    className="inline-flex w-full items-center justify-center gap-2 border border-line bg-graphite-deep/20 px-4 py-3 text-sm font-semibold text-cream hover:border-gold-light hover:bg-gold/10 hover:text-gold-light"
                   >
                     <MessageCircle size={17} className="text-gold" />
                     WhatsApp
                   </a>
                   <a
                     href={telegramLink(settings.telegram)}
-                    className="inline-flex items-center justify-center gap-2 border border-line bg-graphite-deep/20 px-4 py-3 text-sm font-semibold text-cream hover:border-gold-light hover:bg-gold/10 hover:text-gold-light"
+                    className="inline-flex w-full items-center justify-center gap-2 border border-line bg-graphite-deep/20 px-4 py-3 text-sm font-semibold text-cream hover:border-gold-light hover:bg-gold/10 hover:text-gold-light"
                   >
                     <TelegramIcon size={17} className="text-gold" />
                     Telegram
                   </a>
                   <a
                     href={maxMessengerLink(settings.maxMessenger)}
-                    className="inline-flex items-center justify-center gap-2 border border-line bg-graphite-deep/20 px-4 py-3 text-sm font-semibold text-cream hover:border-gold-light hover:bg-gold/10 hover:text-gold-light"
+                    className="inline-flex w-full items-center justify-center gap-2 border border-line bg-graphite-deep/20 px-4 py-3 text-sm font-semibold text-cream hover:border-gold-light hover:bg-gold/10 hover:text-gold-light"
                   >
                     <MaxIcon size={17} className="text-gold" />
                     MAX
@@ -250,28 +250,28 @@ export default async function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-9 grid w-full max-w-[16.5rem] grid-cols-1 gap-4 min-[480px]:max-w-[38rem] min-[520px]:grid-cols-2 md:mt-10 md:max-w-2xl md:grid-cols-3 xl:mt-12 xl:gap-5">
-                <div className="border border-line/80 bg-graphite-deep/20 p-4 backdrop-blur-[1px]">
-                  <p className="serif-title text-4xl font-semibold text-gold-light md:text-5xl">
-                    7+
+              <div className="mt-9 grid w-full max-w-[35rem] grid-cols-1 items-stretch gap-4 min-[480px]:max-w-[38rem] md:mt-10 md:max-w-3xl md:grid-cols-3 xl:mt-12 xl:gap-5">
+                <div className="flex min-h-[6.75rem] min-w-0 flex-col border border-line/80 bg-graphite-deep/20 p-5 backdrop-blur-[1px] md:min-h-[7.5rem] md:px-6">
+                  <p className="serif-title text-4xl font-semibold leading-tight text-gold-light md:text-[1.85rem] lg:text-5xl">
+                    Более 7 лет
                   </p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.16em] text-cream/80 md:text-sm md:tracking-[0.18em]">
-                    лет опыта
+                  <p className="mt-auto pt-2 text-xs uppercase tracking-[0.16em] text-cream/80 md:text-sm md:tracking-[0.18em]">
+                    опыта
                   </p>
                 </div>
-                <div className="border border-line/80 bg-graphite-deep/20 p-4 backdrop-blur-[1px]">
-                  <p className="serif-title text-4xl font-semibold text-gold-light md:text-5xl">
+                <div className="flex min-h-[6.75rem] min-w-0 flex-col border border-line/80 bg-graphite-deep/20 p-5 backdrop-blur-[1px] md:min-h-[7.5rem] md:px-6">
+                  <p className="serif-title text-4xl font-semibold leading-tight text-gold-light md:text-5xl">
                     120+
                   </p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.16em] text-cream/80 md:text-sm md:tracking-[0.18em]">
+                  <p className="mt-auto pt-2 text-xs uppercase tracking-[0.16em] text-cream/80 md:text-sm md:tracking-[0.18em]">
                     сделок
                   </p>
                 </div>
-                <div className="border border-line/80 bg-graphite-deep/20 p-4 backdrop-blur-[1px] min-[520px]:col-span-2 md:col-span-1">
-                  <p className="serif-title text-4xl font-semibold text-gold-light md:text-5xl">
+                <div className="flex min-h-[6.75rem] min-w-0 flex-col border border-line/80 bg-graphite-deep/20 p-5 backdrop-blur-[1px] md:min-h-[7.5rem] md:px-6">
+                  <p className="serif-title text-4xl font-semibold leading-tight text-gold-light md:text-5xl">
                     24/7
                   </p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.16em] text-cream/80 md:text-sm md:tracking-[0.18em]">
+                  <p className="mt-auto pt-2 text-xs uppercase tracking-[0.16em] text-cream/80 md:text-sm md:tracking-[0.18em]">
                     контроль
                   </p>
                 </div>
@@ -481,7 +481,7 @@ export default async function HomePage() {
                   Как проходит работа
                 </p>
                 <h2 className="mt-4 serif-title text-4xl text-cream sm:text-5xl">
-                  Показываю каждый шаг без лишней суеты
+                  Показываю каждый шаг
                 </h2>
                 <p className="mt-5 max-w-md leading-7 text-muted">
                   Я объясняю, что происходит сейчас, какой следующий шаг и где
@@ -514,7 +514,7 @@ export default async function HomePage() {
             <div className="mt-12 grid gap-8 md:mt-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
               <div className="process-reveal">
                 <p className="text-sm uppercase tracking-[0.28em] text-gold-light">
-                  Почему выбирают Марию
+                  Почему выбирают меня
                 </p>
                 <h2 className="mt-4 serif-title text-4xl text-cream sm:text-5xl">
                   Личная работа, а не поток клиентов

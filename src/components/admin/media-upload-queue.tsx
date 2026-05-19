@@ -40,7 +40,10 @@ export function MediaUploadQueue({
   const [items, setItems] = useState<QueueItem[]>([]);
   const processingRef = useRef(false);
   const itemsRef = useRef(items);
-  itemsRef.current = items;
+
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
 
   const busyCount = useMemo(
     () =>
