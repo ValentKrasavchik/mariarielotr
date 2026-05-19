@@ -16,6 +16,7 @@ import {
   Sofa,
   Sparkles,
 } from "lucide-react";
+import { MaxIcon } from "@/components/icons/max-icon";
 import { LeadForm } from "@/components/lead-form";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -27,7 +28,7 @@ import {
 } from "@/lib/constants";
 import { compactAddress, formatPrice, splitLines } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
-import { getSettings, siteUrl, whatsappLink } from "@/lib/site";
+import { getSettings, maxMessengerLink, siteUrl, whatsappLink } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -219,7 +220,7 @@ export default async function ObjectPage({ params }: ObjectPageProps) {
                   {property.address ?? compactAddress(property.city, property.district)}
                 </p>
 
-                <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                <div className="mt-7 grid gap-3 sm:grid-cols-3">
                   <a
                     href={`tel:${settings.phone.replace(/\D/g, "")}`}
                     className="inline-flex items-center justify-center gap-2 bg-gold px-5 py-4 font-semibold text-graphite-deep hover:bg-gold-light"
@@ -233,6 +234,13 @@ export default async function ObjectPage({ params }: ObjectPageProps) {
                   >
                     <MessageCircle size={18} />
                     WhatsApp
+                  </a>
+                  <a
+                    href={maxMessengerLink(settings.maxMessenger)}
+                    className="inline-flex items-center justify-center gap-2 border border-line px-5 py-4 font-semibold text-cream hover:border-gold hover:text-gold-light"
+                  >
+                    <MaxIcon size={18} />
+                    MAX
                   </a>
                 </div>
               </div>
@@ -291,7 +299,7 @@ export default async function ObjectPage({ params }: ObjectPageProps) {
                 Консультация по объекту
               </p>
               <h2 className="mt-4 serif-title text-4xl text-cream">
-                Получите детали, документы и удобное время просмотра
+                Расскажу детали, проверю документы и подберу удобное время просмотра
               </h2>
             </div>
             <div className="border border-line bg-card p-6 md:p-8">
@@ -304,6 +312,7 @@ export default async function ObjectPage({ params }: ObjectPageProps) {
         phone={settings.phone}
         whatsapp={settings.whatsapp}
         telegram={settings.telegram}
+        maxMessenger={settings.maxMessenger}
         email={settings.email}
       />
       <script

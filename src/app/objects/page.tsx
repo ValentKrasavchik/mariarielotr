@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Актуальные объекты недвижимости",
   description:
-    "Каталог объектов риелтора Марии: квартиры, дома, участки и коммерческая недвижимость в Донецке и Донецкой области.",
+    "Объекты, которые Мария лично ведет или рекомендует: квартиры, дома, участки и коммерческая недвижимость в Донецке и Донецкой области.",
   alternates: {
     canonical: `${siteUrl}/objects`,
   },
@@ -107,8 +107,9 @@ export default async function ObjectsPage({ searchParams }: ObjectsPageProps) {
               Актуальные объекты недвижимости
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">
-              Фильтруйте объекты по типу сделки, бюджету, району и статусу.
-              Каждый объект можно обсудить с Марией лично.
+              Здесь собраны объекты, которые я веду или могу обсудить с вами
+              лично. Фильтруйте варианты по типу сделки, бюджету, району и
+              статусу.
             </p>
           </div>
         </section>
@@ -144,7 +145,8 @@ export default async function ObjectsPage({ searchParams }: ObjectsPageProps) {
                   По выбранным фильтрам объектов не найдено
                 </p>
                 <p className="mt-3 text-muted">
-                  Попробуйте изменить параметры или оставьте заявку на подбор.
+                  Попробуйте изменить параметры или оставьте заявку - я подберу
+                  варианты под вашу задачу.
                 </p>
               </div>
             )}
@@ -155,6 +157,7 @@ export default async function ObjectsPage({ searchParams }: ObjectsPageProps) {
         phone={settings.phone}
         whatsapp={settings.whatsapp}
         telegram={settings.telegram}
+        maxMessenger={settings.maxMessenger}
         email={settings.email}
       />
     </>

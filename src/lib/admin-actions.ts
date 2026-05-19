@@ -382,6 +382,18 @@ export async function updateReview(id: string, formData: FormData) {
   revalidatePath("/admin/reviews");
 }
 
+export async function toggleReviewPublish(id: string, isPublished: boolean) {
+  await ensureAdmin();
+
+  await prisma.review.update({
+    where: { id },
+    data: { isPublished: !isPublished },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/admin/reviews");
+}
+
 export async function deleteReview(formData: FormData) {
   await ensureAdmin();
 
@@ -405,6 +417,7 @@ export async function updateSettings(formData: FormData) {
   await ensureAdmin();
 
   const first = await prisma.siteSettings.findFirst();
+  const maxMessenger = text(formData, "maxMessenger");
   const data = {
     phone: text(formData, "phone"),
     whatsapp: text(formData, "whatsapp"),
@@ -422,8 +435,14 @@ export async function updateSettings(formData: FormData) {
 
   if (first) {
     await prisma.siteSettings.update({ where: { id: first.id }, data });
+    await prisma.$executeRaw`
+      UPDATE SiteSettings SET maxMessenger = ${maxMessenger} WHERE id = ${first.id}
+    `;
   } else {
-    await prisma.siteSettings.create({ data });
+    const created = await prisma.siteSettings.create({ data });
+    await prisma.$executeRaw`
+      UPDATE SiteSettings SET maxMessenger = ${maxMessenger} WHERE id = ${created.id}
+    `;
   }
 
   revalidatePath("/");

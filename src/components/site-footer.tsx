@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { MessageCircle, Phone } from "lucide-react";
+import { MaxIcon } from "@/components/icons/max-icon";
 import { TelegramIcon } from "@/components/icons/telegram-icon";
-import { telegramLink, whatsappLink } from "@/lib/site";
+import { maxMessengerLink, telegramLink, whatsappLink } from "@/lib/site";
 
 type SiteFooterProps = {
   phone: string;
   whatsapp: string;
   telegram: string;
+  maxMessenger: string;
   email: string;
 };
 
@@ -14,6 +16,7 @@ export function SiteFooter({
   phone,
   whatsapp,
   telegram,
+  maxMessenger,
   email,
 }: SiteFooterProps) {
   return (
@@ -24,8 +27,8 @@ export function SiteFooter({
             Мария Риелтор
           </Link>
           <p className="mt-4 max-w-md text-sm leading-6 text-muted">
-            Персональное сопровождение покупки, продажи и подбора недвижимости
-            в Донецке и Донецкой области.
+            Я лично сопровождаю покупку, продажу и подбор недвижимости в
+            Донецке и Донецкой области.
           </p>
         </div>
 
@@ -60,6 +63,10 @@ export function SiteFooter({
             <TelegramIcon size={16} className="text-gold" />
             Telegram
           </a>
+          <a href={maxMessengerLink(maxMessenger)} className="flex gap-2 hover:text-gold-light">
+            <MaxIcon size={16} className="text-gold" />
+            MAX
+          </a>
           <a href={`mailto:${email}`} className="block hover:text-gold-light">
             {email}
           </a>
@@ -67,11 +74,8 @@ export function SiteFooter({
       </div>
 
       <div className="border-t border-line py-5">
-        <div className="section-shell flex flex-col justify-between gap-2 text-xs text-muted sm:flex-row">
+        <div className="section-shell text-xs text-muted">
           <span>© 2026 Мария Риелтор. Все права защищены.</span>
-          <Link href="/admin" className="hover:text-gold-light">
-            Админка
-          </Link>
         </div>
       </div>
     </footer>

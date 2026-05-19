@@ -14,16 +14,24 @@ import {
   Scale,
   Search,
   ShieldCheck,
-  Star,
 } from "lucide-react";
+import { MaxIcon } from "@/components/icons/max-icon";
 import { TelegramIcon } from "@/components/icons/telegram-icon";
 import { LeadForm } from "@/components/lead-form";
 import { PropertyCard } from "@/components/property-card";
+import { ReviewForm } from "@/components/review-form";
+import { ReviewsCarousel } from "@/components/reviews-carousel";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { prisma } from "@/lib/prisma";
 import { compactAddress, formatDate, formatPrice } from "@/lib/format";
-import { getSettings, siteUrl, telegramLink, whatsappLink } from "@/lib/site";
+import {
+  getSettings,
+  maxMessengerLink,
+  siteUrl,
+  telegramLink,
+  whatsappLink,
+} from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -48,55 +56,55 @@ const services = [
   {
     icon: Landmark,
     title: "Продажа недвижимости",
-    text: "Подготовка объекта, позиционирование, показы и переговоры по цене.",
+    text: "Готовлю объект к продаже, показываю сильные стороны и веду переговоры по цене.",
   },
   {
     icon: KeyRound,
     title: "Покупка квартиры",
-    text: "Поиск вариантов, проверка документов и сопровождение до регистрации.",
+    text: "Подбираю варианты, проверяю документы и сопровождаю вас до регистрации.",
   },
   {
     icon: Search,
     title: "Подбор объекта",
-    text: "Фильтрация рынка под задачу, бюджет, район и сценарий жизни.",
+    text: "Отбираю объекты под вашу задачу, бюджет, район и привычный сценарий жизни.",
   },
   {
     icon: ClipboardCheck,
     title: "Сопровождение сделки",
-    text: "Контроль этапов, коммуникаций, сроков и юридически важных деталей.",
+    text: "Лично контролирую этапы, коммуникацию, сроки и юридически важные детали.",
   },
   {
     icon: Scale,
     title: "Оценка недвижимости",
-    text: "Реалистичная цена с учетом рынка, состояния объекта и спроса.",
+    text: "Помогаю определить реалистичную цену с учетом рынка, состояния объекта и спроса.",
   },
   {
     icon: MessageCircle,
     title: "Консультация по рынку",
-    text: "Понятная стратегия перед покупкой, продажей или инвестицией.",
+    text: "Объясняю ситуацию на рынке простым языком и предлагаю понятный следующий шаг.",
   },
 ];
 
 const steps = [
   {
     title: "Консультация",
-    text: "Обсуждаем задачу, бюджет, сроки и формат сопровождения.",
+    text: "Я выслушиваю вашу задачу, уточняю бюджет, сроки и формат помощи.",
   },
   {
     title: "Анализ задачи",
-    text: "Оцениваем ситуацию, объект, документы и возможные риски.",
+    text: "Проверяю ситуацию, объект, документы и заранее объясняю возможные риски.",
   },
   {
     title: "Подбор или подготовка объекта",
-    text: "Подбираем подходящие варианты или готовим объект к продаже.",
+    text: "Подбираю подходящие варианты или готовлю ваш объект к продаже.",
   },
   {
     title: "Показы и переговоры",
-    text: "Организуем просмотры и ведем переговоры в интересах клиента.",
+    text: "Организую просмотры и веду переговоры в ваших интересах.",
   },
   {
     title: "Сопровождение сделки",
-    text: "Контролируем этапы сделки до финального результата.",
+    text: "Остаюсь рядом и контролирую этапы сделки до финального результата.",
   },
 ];
 
@@ -104,26 +112,26 @@ const facts = [
   {
     number: "01",
     icon: Search,
-    title: "Индивидуальная стратегия под задачу клиента",
-    text: "Работа строится от цели, бюджета и реальной ситуации на рынке.",
+    title: "Личная стратегия под вашу задачу",
+    text: "Я отталкиваюсь от вашей цели, бюджета и реальной ситуации на рынке.",
   },
   {
     number: "02",
     icon: ShieldCheck,
-    title: "Проверка документов и спокойная коммуникация",
-    text: "Риски объясняются заранее и понятным языком.",
+    title: "Проверка документов без сложных слов",
+    text: "Заранее объясняю риски понятным языком, чтобы вы принимали решения спокойно.",
   },
   {
     number: "03",
     icon: Scale,
-    title: "Переговоры в интересах клиента до результата",
-    text: "Цена, сроки и условия сделки защищаются на каждом этапе.",
+    title: "Переговоры в ваших интересах",
+    text: "Защищаю цену, сроки и условия сделки на каждом этапе.",
   },
   {
     number: "04",
     icon: BadgeCheck,
-    title: "Сопровождение на каждом этапе сделки",
-    text: "Мария остается рядом до финального оформления.",
+    title: "Я рядом до финального оформления",
+    text: "Не передаю вас между менеджерами: веду сделку лично и остаюсь на связи.",
   },
 ];
 
@@ -149,7 +157,7 @@ export default async function HomePage() {
     prisma.review.findMany({
       where: { isPublished: true },
       orderBy: { date: "desc" },
-      take: 5,
+      take: 10,
     }),
   ]);
 
@@ -217,7 +225,7 @@ export default async function HomePage() {
                 <p className="text-xs uppercase tracking-[0.18em] text-cream/70">
                   Или напишите напрямую
                 </p>
-                <div className="mt-3 grid gap-3 min-[480px]:grid-cols-2">
+                <div className="mt-3 grid gap-3 min-[480px]:grid-cols-3">
                   <a
                     href={whatsappLink(settings.whatsapp)}
                     className="inline-flex items-center justify-center gap-2 border border-line bg-graphite-deep/20 px-4 py-3 text-sm font-semibold text-cream hover:border-gold-light hover:bg-gold/10 hover:text-gold-light"
@@ -231,6 +239,13 @@ export default async function HomePage() {
                   >
                     <TelegramIcon size={17} className="text-gold" />
                     Telegram
+                  </a>
+                  <a
+                    href={maxMessengerLink(settings.maxMessenger)}
+                    className="inline-flex items-center justify-center gap-2 border border-line bg-graphite-deep/20 px-4 py-3 text-sm font-semibold text-cream hover:border-gold-light hover:bg-gold/10 hover:text-gold-light"
+                  >
+                    <MaxIcon size={17} className="text-gold" />
+                    MAX
                   </a>
                 </div>
               </div>
@@ -352,13 +367,18 @@ export default async function HomePage() {
         <section id="about" className="bg-graphite-deep py-24">
           <div className="section-shell grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="relative min-h-[420px] overflow-hidden border border-line bg-card">
+              <Image
+                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=85"
+                alt="Мария, персональный риелтор"
+                fill
+                sizes="(min-width: 1024px) 40vw, 100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-graphite-deep/80 via-graphite-deep/20 to-transparent" />
               <div className="absolute inset-6 border border-line" />
-              <div className="absolute inset-0 grid place-items-center">
-                <div className="text-center">
-                  <div className="mx-auto grid size-36 place-items-center border border-line text-5xl text-gold-light">
-                    М
-                  </div>
-                  <p className="mt-6 serif-title text-3xl text-cream">
+              <div className="absolute inset-x-0 bottom-0 p-8">
+                <div className="border-l border-gold-light/70 pl-5">
+                  <p className="serif-title text-3xl text-cream">
                     Мария
                   </p>
                   <p className="mt-2 text-sm uppercase tracking-[0.2em] text-muted">
@@ -370,10 +390,10 @@ export default async function HomePage() {
 
             <div>
               <p className="text-sm uppercase tracking-[0.28em] text-gold-light">
-                О Марии
+                Обо мне
               </p>
               <h2 className="mt-4 serif-title text-4xl leading-tight text-cream sm:text-5xl">
-                Спокойное сопровождение там, где важны документы, цена и доверие
+                Я лично сопровождаю сделки, где важны документы, цена и доверие
               </h2>
               <p className="mt-6 text-lg leading-8 text-muted">
                 {settings.aboutText}
@@ -383,7 +403,7 @@ export default async function HomePage() {
                   "Опытная оценка рыночной ситуации",
                   "Внимание к юридическим деталям",
                   "Бережная коммуникация с клиентом",
-                  "Личное участие до результата",
+                  "Мое личное участие до результата",
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3 text-muted">
                     <CheckCircle2 className="mt-1 text-gold" size={19} />
@@ -405,7 +425,7 @@ export default async function HomePage() {
                 Услуги
               </p>
               <h2 className="mt-4 serif-title text-4xl text-cream sm:text-5xl">
-                Полный цикл работы с недвижимостью
+                Помогаю с недвижимостью от первого вопроса до сделки
               </h2>
             </div>
             <div className="mt-10 grid gap-5 md:mt-12 md:grid-cols-2 xl:grid-cols-3">
@@ -461,11 +481,11 @@ export default async function HomePage() {
                   Как проходит работа
                 </p>
                 <h2 className="mt-4 serif-title text-4xl text-cream sm:text-5xl">
-                  Понятный процесс без лишней суеты
+                  Показываю каждый шаг без лишней суеты
                 </h2>
                 <p className="mt-5 max-w-md leading-7 text-muted">
-                  Каждый этап прозрачен: вы понимаете, что происходит сейчас,
-                  какой следующий шаг и где важно принять решение.
+                  Я объясняю, что происходит сейчас, какой следующий шаг и где
+                  важно принять решение.
                 </p>
               </div>
               <div className="space-y-4">
@@ -497,11 +517,11 @@ export default async function HomePage() {
                   Почему выбирают Марию
                 </p>
                 <h2 className="mt-4 serif-title text-4xl text-cream sm:text-5xl">
-                  Высокий уровень сервиса в деталях
+                  Личная работа, а не поток клиентов
                 </h2>
                 <p className="mt-5 max-w-md leading-7 text-muted">
-                  Важны не только найденный объект или покупатель, но и
-                  спокойствие клиента в процессе.
+                  Для меня важны не только найденный объект или покупатель, но и
+                  ваше спокойствие в процессе.
                 </p>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -536,38 +556,40 @@ export default async function HomePage() {
 
         <section id="reviews" className="py-24">
           <div className="section-shell">
-            <div className="max-w-2xl">
-              <p className="text-sm uppercase tracking-[0.28em] text-gold-light">
-                Отзывы
-              </p>
-              <h2 className="mt-4 serif-title text-4xl text-cream sm:text-5xl">
-                Клиенты ценят спокойствие и ясность
-              </h2>
-            </div>
-            <div className="mt-12 grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {reviews.map((review) => (
-                <article
-                  key={review.id}
-                  className="flex h-full flex-col border border-line bg-card p-6"
-                >
-                  <div className="flex gap-1 text-gold-light">
-                    {Array.from({ length: review.rating }).map((_, index) => (
-                      <Star key={index} size={16} fill="currentColor" />
-                    ))}
-                  </div>
-                  <p className="mt-5 flex-1 leading-7 text-muted">
-                    {review.text}
-                  </p>
-                  <div className="mt-6 border-t border-line pt-5">
-                    <p className="font-semibold text-cream">
-                      {review.clientName}
-                    </p>
-                    <p className="mt-1 text-sm text-muted">
-                      {formatDate(review.date)}
-                    </p>
-                  </div>
-                </article>
-              ))}
+            <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(360px,420px)] xl:items-start">
+              <div className="max-w-2xl xl:col-start-1 xl:row-start-1">
+                <p className="text-sm uppercase tracking-[0.28em] text-gold-light">
+                  Отзывы
+                </p>
+                <h2 className="mt-4 serif-title text-4xl text-cream sm:text-5xl">
+                  Клиенты ценят мой спокойный и понятный подход
+                </h2>
+              </div>
+              <div className="min-w-0 xl:col-start-1 xl:row-start-2">
+                <ReviewsCarousel
+                  reviews={reviews.map((review) => ({
+                    id: review.id,
+                    clientName: review.clientName,
+                    text: review.text,
+                    rating: review.rating,
+                    date: formatDate(review.date),
+                  }))}
+                />
+              </div>
+              <div className="border border-line bg-card p-6 md:p-8 xl:col-start-2 xl:row-start-2 xl:h-[470px] xl:p-6">
+                <p className="text-sm uppercase tracking-[0.22em] text-gold-light">
+                  Оставить отзыв
+                </p>
+                <h3 className="mt-3 serif-title text-2xl leading-tight text-cream">
+                  Поделитесь впечатлением о работе со мной
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-muted">
+                  Отзыв появится на сайте после проверки.
+                </p>
+                <div className="mt-5">
+                  <ReviewForm compact />
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -579,11 +601,11 @@ export default async function HomePage() {
                 Контакты
               </p>
               <h2 className="mt-4 serif-title text-4xl text-cream sm:text-5xl">
-                Обсудим вашу задачу по недвижимости
+                Расскажите мне о вашей задаче по недвижимости
               </h2>
               <p className="mt-5 max-w-md text-lg leading-8 text-muted">
-                Оставьте заявку - Мария свяжется с вами, уточнит детали и
-                предложит следующий шаг.
+                Оставьте заявку - я свяжусь с вами, уточню детали и предложу
+                следующий шаг.
               </p>
               <div className="mt-8 grid gap-4 text-muted sm:grid-cols-2 lg:grid-cols-1">
                 <div className="border border-line/70 bg-card/70 p-5">
@@ -616,6 +638,13 @@ export default async function HomePage() {
                     >
                       <TelegramIcon size={19} className="text-gold" />
                       Telegram
+                    </a>
+                    <a
+                      href={maxMessengerLink(settings.maxMessenger)}
+                      className="flex items-center gap-3 hover:text-gold-light"
+                    >
+                      <MaxIcon size={19} className="text-gold" />
+                      MAX
                     </a>
                   </div>
                 </div>
@@ -650,6 +679,7 @@ export default async function HomePage() {
         phone={settings.phone}
         whatsapp={settings.whatsapp}
         telegram={settings.telegram}
+        maxMessenger={settings.maxMessenger}
         email={settings.email}
       />
       <script

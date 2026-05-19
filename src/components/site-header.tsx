@@ -32,7 +32,7 @@ export function SiteHeader({ phone }: SiteHeaderProps) {
 
         <nav className="hidden items-center gap-7 text-sm text-muted lg:flex">
           <Link href="/#about" className="hover:text-gold-light">
-            О Марии
+            Обо мне
           </Link>
           <Link href="/#services" className="hover:text-gold-light">
             Услуги

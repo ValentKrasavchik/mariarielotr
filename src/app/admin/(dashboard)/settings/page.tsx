@@ -20,6 +20,7 @@ export default async function AdminSettingsPage() {
             <input name="phone" defaultValue={settings.phone} placeholder="Телефон" className="h-12 px-4" />
             <input name="whatsapp" defaultValue={settings.whatsapp} placeholder="WhatsApp" className="h-12 px-4" />
             <input name="telegram" defaultValue={settings.telegram} placeholder="Telegram" className="h-12 px-4" />
+            <input name="maxMessenger" defaultValue={settings.maxMessenger} placeholder="MAX: username или ссылка" className="h-12 px-4" />
             <input name="email" defaultValue={settings.email} placeholder="Email" className="h-12 px-4" />
             <input name="workTime" defaultValue={settings.workTime} placeholder="Время работы" className="h-12 px-4" />
             <input name="region" defaultValue={settings.region} placeholder="Регион работы" className="h-12 px-4" />
@@ -32,7 +33,7 @@ export default async function AdminSettingsPage() {
             <input name="heroTitle" defaultValue={settings.heroTitle} placeholder="Название в hero" className="h-12 px-4" />
             <input name="heroSubtitle" defaultValue={settings.heroSubtitle} placeholder="Подзаголовок hero" className="h-12 px-4" />
             <textarea name="heroText" defaultValue={settings.heroText} placeholder="Описание hero" className="px-4 py-3" />
-            <textarea name="aboutText" defaultValue={settings.aboutText} placeholder="Текст О Марии" className="px-4 py-3" />
+            <textarea name="aboutText" defaultValue={settings.aboutText} placeholder="Текст Обо мне" className="px-4 py-3" />
           </div>
         </section>
 

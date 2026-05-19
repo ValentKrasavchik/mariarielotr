@@ -22,7 +22,26 @@ const leadSchema = z.object({
   propertyId: z.string().optional(),
 });
 
+const reviewSchema = z.object({
+  clientName: z.string().min(2, "Укажите имя"),
+  rating: z.coerce
+    .number()
+    .int()
+    .min(1, "Минимальная оценка - 1")
+    .max(5, "Максимальная оценка - 5"),
+  text: z
+    .string()
+    .min(10, "Напишите отзыв чуть подробнее")
+    .max(1000, "Отзыв слишком длинный"),
+});
+
 export type LeadFormState = {
+  ok: boolean;
+  message: string;
+  errors?: Record<string, string[] | undefined>;
+};
+
+export type ReviewFormState = {
   ok: boolean;
   message: string;
   errors?: Record<string, string[] | undefined>;
@@ -126,6 +145,48 @@ export async function createLeadAction(
 
   return {
     ok: true,
-    message: "Заявка отправлена. Мария свяжется с вами в ближайшее время.",
+    message: "Заявка отправлена. Я свяжусь с вами в ближайшее время.",
+  };
+}
+
+export async function createPublicReviewAction(
+  _state: ReviewFormState,
+  formData: FormData,
+): Promise<ReviewFormState> {
+  const parsed = reviewSchema.safeParse({
+    clientName: String(formData.get("clientName") ?? "").trim(),
+    rating: String(formData.get("rating") ?? "5").trim(),
+    text: String(formData.get("text") ?? "").trim(),
+  });
+
+  if (!parsed.success) {
+    return {
+      ok: false,
+      message: "Проверьте данные отзыва",
+      errors: parsed.error.flatten().fieldErrors,
+    };
+  }
+
+  try {
+    await prisma.review.create({
+      data: {
+        clientName: parsed.data.clientName,
+        rating: parsed.data.rating,
+        text: parsed.data.text,
+        isPublished: false,
+      },
+    });
+  } catch {
+    return {
+      ok: false,
+      message: "Не удалось отправить отзыв. Попробуйте еще раз.",
+    };
+  }
+
+  revalidatePath("/admin/reviews");
+
+  return {
+    ok: true,
+    message: "Спасибо за отзыв. Я опубликую его после проверки.",
   };
 }

@@ -1,7 +1,8 @@
-import { Plus, Trash2 } from "lucide-react";
+import { CheckCircle2, EyeOff, Plus, Trash2 } from "lucide-react";
 import {
   createReview,
   deleteReview,
+  toggleReviewPublish,
   updateReview,
 } from "@/lib/admin-actions";
 import { prisma } from "@/lib/prisma";
@@ -12,7 +13,7 @@ function dateInputValue(date: Date) {
 
 export default async function AdminReviewsPage() {
   const reviews = await prisma.review.findMany({
-    orderBy: { date: "desc" },
+    orderBy: [{ isPublished: "asc" }, { date: "desc" }],
   });
 
   return (
@@ -45,7 +46,29 @@ export default async function AdminReviewsPage() {
 
       <div className="mt-8 space-y-5">
         {reviews.map((review) => (
-          <article key={review.id} className="border border-line bg-card p-5 md:p-6">
+          <article
+            key={review.id}
+            className={`border bg-card p-5 md:p-6 ${
+              review.isPublished ? "border-line" : "border-gold/60"
+            }`}
+          >
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <span
+                className={`inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] ${
+                  review.isPublished
+                    ? "border border-line text-muted"
+                    : "bg-gold text-graphite-deep"
+                }`}
+              >
+                {review.isPublished ? "Опубликован" : "На проверке"}
+              </span>
+              <form action={toggleReviewPublish.bind(null, review.id, review.isPublished)}>
+                <button className="inline-flex items-center gap-2 border border-line px-3 py-2 text-sm text-muted hover:border-gold hover:text-gold-light">
+                  {review.isPublished ? <EyeOff size={16} /> : <CheckCircle2 size={16} />}
+                  {review.isPublished ? "Скрыть" : "Опубликовать"}
+                </button>
+              </form>
+            </div>
             <form action={updateReview.bind(null, review.id)} className="grid gap-4 md:grid-cols-2">
               <input name="clientName" defaultValue={review.clientName} className="h-12 px-4" />
               <input name="rating" type="number" min="1" max="5" defaultValue={review.rating} className="h-12 px-4" />
